@@ -1,31 +1,44 @@
 #include <iostream>
+#include <vector>
+#include <limits>
+using namespace std;
 
-int main() {
-    int n, max_element = 0, second_max = 0, third_max = 0;
-
-    std::cout << "Enter the number of elements: ";
-    std::cin >> n;
-
-    std::cout << "Enter the elements: ";
-    for (int i = 0; i < n; i++) {
-        int elem;
-        std::cin >> elem;
-        if (i == 0) {
-            max_element = elem;
-            second_max = elem;
-        } else if (elem > max_element) {
-            third_max = second_max;
-            second_max = max_element;
-            max_element = elem;
-        } else if (i == 1 || elem > second_max) {
-            third_max = second_max;
-            second_max = elem;
-        } else if (i > 1 && elem > third_max) {
-            third_max = elem;
-        }
+// Function to find the second and third largest elements
+void findSecondAndThirdLargest(const vector<int>& arr, int& secondLargest, int& thirdLargest) {
+    if (arr.size() < 3) {
+        cout << "Array must have at least 3 elements.\n";
+        secondLargest = thirdLargest = numeric_limits<int>::min();
+        return;
     }
 
-    std::cout << "The second largest element is: " << second_max << "\nThe third largest element is: " << third_max;
+    int first = numeric_limits<int>::min();
+    secondLargest = numeric_limits<int>::min();
+    thirdLargest = numeric_limits<int>::min();
+
+    for (int num : arr) {
+        if (num > first) {
+            thirdLargest = secondLargest;
+            secondLargest = first;
+            first = num;
+        } else if (num > secondLargest && num != first) {
+            thirdLargest = secondLargest;
+            secondLargest = num;
+        } else if (num > thirdLargest && num != secondLargest && num != first) {
+            thirdLargest = num;
+        }
+    }
+}
+
+int main() {
+    vector<int> arr = {10, 45, 67, 89, 34, 67, 89, 90};
+
+    int second, third;
+    findSecondAndThirdLargest(arr, second, third);
+
+    if (second != numeric_limits<int>::min())
+        cout << "Second largest: " << second << endl;
+    if (third != numeric_limits<int>::min())
+        cout << "Third largest: " << third << endl;
 
     return 0;
 }
